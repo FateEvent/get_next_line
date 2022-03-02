@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/02 18:00:01 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/02 18:22:00 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_next_line(int fd)
 {
 	int			i;
 	static int	bytes_to_read;
-	int			bytes_read;
+	int			bytes_lus;
 	static char	buffer[BUFFER_SIZE + 1];
 	char		*reading_buf;
 
@@ -42,16 +42,42 @@ char	*get_next_line(int fd)
 		if (bytes_to_read == BUFFER_SIZE || !(buffer[0]))
 			bytes_read = read(fd, &buffer, MAX_SIZE);
 		*/
+		/*
 		while (bytes_read = read(fd, &buffer, BUFFER_SIZE))
 			buffer[bytes_read] = '\0';
+		*/
+		bytes_lus = read(fd, &buffer, BEAUCOUP);
+		buffer[bytes_lus] = '\0';
 		bytes_to_read = ft_linelen(buffer);
 		reading_buf = malloc(sizeof(char) * (bytes_to_read + 1));
 		while (*buffer != '\n' || *buffer != '\0')
 			reading_buf[i++] = *(buffer)++;
-		reading_buf[i++] = *buffer;
+		if (*buffer == '\n')
+			reading_buf[i++] = '\n';
+		
 		reading_buf = '\0';
 		return (reading_buf);
 	}
+}
+		bytes_lus = read(fd, &buffer, BEAUCOUP);
+		{
+				buffer[bytes_lus] = '\0';
+			bytes_to_read = ft_linelen(buffer);
+			reading_buf = malloc(sizeof(char) * (bytes_to_read + 1));
+			while (*buffer != '\n' || *buffer != '\0')
+				reading_buf[i++] = *(buffer)++;
+			if (*buffer == '\n')
+				reading_buf[i++] = '\n';
+		}
+		
+		reading_buf = '\0';
+		return (reading_buf);
+
+
+
+ft_stocker()
+{
+	while 
 }
 
 void	ft_line_reader(char *buffer, int fd)
