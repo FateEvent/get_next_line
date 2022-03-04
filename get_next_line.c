@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/02 18:22:00 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/04 15:17:59 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ size_t	ft_linelen(const char *str)
 	counter++;
 	return (counter);
 }
-
+// partir sur une struct ou un tableau pour ne garder qu'une variable statique pour les bonus
 char	*get_next_line(int fd)
 {
 	int			i;
@@ -59,19 +59,6 @@ char	*get_next_line(int fd)
 		return (reading_buf);
 	}
 }
-		bytes_lus = read(fd, &buffer, BEAUCOUP);
-		{
-				buffer[bytes_lus] = '\0';
-			bytes_to_read = ft_linelen(buffer);
-			reading_buf = malloc(sizeof(char) * (bytes_to_read + 1));
-			while (*buffer != '\n' || *buffer != '\0')
-				reading_buf[i++] = *(buffer)++;
-			if (*buffer == '\n')
-				reading_buf[i++] = '\n';
-		}
-		
-		reading_buf = '\0';
-		return (reading_buf);
 
 
 
