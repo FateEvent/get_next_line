@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/04 15:17:59 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/07 18:53:29 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,76 +15,67 @@
 */
 
 #include "get_next_line.h"
-#define MAX_SIZE 5000
+#define BUFFER_SIZE 5000
 
 size_t	ft_linelen(const char *str)
 {
 	size_t	counter;
 
 	counter = 0;
-	while (str[counter] != '\n')
+	while (str[counter] != '\n' || str[counter] != '\0')
 		counter++;
 	counter++;
 	return (counter);
 }
+
 // partir sur une struct ou un tableau pour ne garder qu'une variable statique pour les bonus
 char	*get_next_line(int fd)
 {
 	int			i;
-	static int	bytes_to_read;
+	int			bytes_to_read;
 	int			bytes_lus;
-	static char	buffer[BUFFER_SIZE + 1];
-	char		*reading_buf;
+	char		buffer[BUFFER_SIZE + 1];
+	static char	*reading_buf;
 
+	i = 0;
 	if (fd)
 	{
+		while (bytes_lus = read(fd, &buffer, BUFFER_SIZE))
+		{
+			buffer[bytes_lus] = '\0';
+			if (ft_strchr(buffer, '\n') != NULL)
+			{
+				bytes_to_read = ft_linelen(buffer);
+				reading_buf = malloc(sizeof(char) * (bytes_to_read + 1));
+				while (*buffer != '\n')
+					*(reading_buf)++ = (*buffer)++;
+				reading_buf[i++] = '\n';
+				reading_buf = '\0';
+				return (reading_buf);
+			}
+			else
+			{
+
+			}
+			
 		/*
 		if (bytes_to_read == BUFFER_SIZE || !(buffer[0]))
 			bytes_read = read(fd, &buffer, MAX_SIZE);
 		*/
-		/*
-		while (bytes_read = read(fd, &buffer, BUFFER_SIZE))
-			buffer[bytes_read] = '\0';
-		*/
-		bytes_lus = read(fd, &buffer, BEAUCOUP);
-		buffer[bytes_lus] = '\0';
-		bytes_to_read = ft_linelen(buffer);
-		reading_buf = malloc(sizeof(char) * (bytes_to_read + 1));
-		while (*buffer != '\n' || *buffer != '\0')
-			reading_buf[i++] = *(buffer)++;
-		if (*buffer == '\n')
-			reading_buf[i++] = '\n';
-		
-		reading_buf = '\0';
 		return (reading_buf);
 	}
 }
 
-
-
-ft_stocker()
+int	main()
 {
-	while 
-}
+	int		bytes_read;
+	int		fd;
+	char	*buf;
 
-void	ft_line_reader(char *buffer, int fd)
-{
-	int	bytes_read;
-	int	i;
-	int	j;
-
-	i = 1;
-	j = 0;
-	(void) argv;
-	while ()
-	{
-		bytes_read = read(fd, &buffer[j], MAX_SIZE - j);
-		if (bytes_read == -1)
-			return ;
-		close(fd);
-		buffer[bytes_read + j] = '\0';
-		while (buffer[j] != '\0')
-			j++;
-	}
-	i++;
+	fd = open("text.txt", O_RDONLY || O_CREAT);
+	if (fd == -1)
+		return ;
+	buf = get_next_line(fd);
+	close(fd);
+	free(buf);
 }
