@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/08 16:17:57 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/08 16:39:37 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 #include "get_next_line.h"
 #define BUFFER_SIZE 5
-
 #include <stdio.h>
 
 size_t	ft_linelen(const char *str)
@@ -33,7 +32,6 @@ size_t	ft_linelen(const char *str)
 char	*trim_and_stock(char *str)
 {
 	char	*s;
-	char	*rest;
 	int		i;
 
 	i = 0;
@@ -43,9 +41,7 @@ char	*trim_and_stock(char *str)
 		s[i] = str[i];
 		i++;
 	}
-	printf("read1: %s\n", str);
 	s[i++] = '\n';
-	printf("%s\n", s);
 	s[i] = '\0';
 	return (s);
 }
@@ -53,33 +49,28 @@ char	*trim_and_stock(char *str)
 // partir sur une struct ou un tableau pour ne garder qu'une variable statique pour les bonus
 char	*get_next_line(int fd)
 {
-	int			bytes_to_read;
 	int			read_bytes;
 	char		buffer[BUFFER_SIZE + 1];
 	static char	*reading_buf;
 	char		*ret;
 
 	reading_buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!reading_buf || !fd || fd < 0)
+		return (NULL);
 	read_bytes = 1;
-	if (fd)
+	while (read_bytes)
 	{
-		while (read_bytes)
+		read_bytes = read(fd, &buffer, BUFFER_SIZE);
+		buffer[read_bytes] = '\0';
+		if (ft_strchr(buffer, '\n') != NULL)
 		{
-			read_bytes = read(fd, &buffer, BUFFER_SIZE);
-			buffer[read_bytes] = '\0';
-			if (ft_strchr(buffer, '\n') != NULL)
-			{
-				reading_buf = ft_strjoin(reading_buf, buffer);
-				printf("read: %s\n", reading_buf);
-				ret = trim_and_stock(reading_buf);
-				printf("ret: %s\n", ret);
-				return (ret);
-			}
-			else
-			{
-				reading_buf = ft_strjoin(reading_buf, buffer);
-//				printf("read: %s\n", reading_buf);
-			}
+			reading_buf = ft_strjoin(reading_buf, buffer);
+			ret = trim_and_stock(reading_buf);
+			return (ret);
+		}
+		else
+		{
+			reading_buf = ft_strjoin(reading_buf, buffer);
 		}
 	}
 	return (NULL);
@@ -87,7 +78,6 @@ char	*get_next_line(int fd)
 
 int	main()
 {
-	int		bytes_read;
 	int		fd;
 	char	*buf;
 	char	*krum;
