@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/08 16:39:37 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/08 17:35:25 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,20 @@ char	*get_next_line(int fd)
 	read_bytes = 1;
 	while (read_bytes)
 	{
+		printf("%d", read_bytes);
 		read_bytes = read(fd, &buffer, BUFFER_SIZE);
 		buffer[read_bytes] = '\0';
 		if (ft_strchr(buffer, '\n') != NULL)
 		{
+			free(reading_buf);
 			reading_buf = ft_strjoin(reading_buf, buffer);
 			ret = trim_and_stock(reading_buf);
+			free(reading_buf);
 			return (ret);
 		}
 		else
 		{
+			free(reading_buf);
 			reading_buf = ft_strjoin(reading_buf, buffer);
 		}
 	}
