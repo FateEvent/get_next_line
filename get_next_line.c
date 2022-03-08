@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/08 18:53:53 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/08 18:56:13 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ char	*get_next_line(int fd)
 	static char	*reading_buf;
 	char		*ret;
 
-	reading_buf = "";
+	reading_buf = malloc(sizeof(char) * (BUFFER_SIZE + 1);
+	if (!reading_buf || !fd || fd < 0)
+		return (NULL);
 	read_bytes = 1;
 	while (read_bytes)
 	{
