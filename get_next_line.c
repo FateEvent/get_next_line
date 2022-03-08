@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/08 15:23:45 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/08 15:44:33 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,14 @@ int	main()
 		return (1);
 	buf = get_next_line(fd);
 	krum = get_next_line(fd);
-//	dash = get_next_line(fd);
+	dash = get_next_line(fd);
 
 	close(fd);
 	printf("return 1: %s", buf);
 	printf("return 2: %s", krum);
-//	printf("return 3: %s", dash);
+	printf("return 3: %s", dash);
 	free(buf);
 	free(krum);
-//	free(dash);
+	free(dash);
 	return (0);
 }
