@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/08 18:50:45 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/08 18:53:53 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,12 @@ char	*trim_and_stock(char *str)
 
 char	*get_next_line(int fd)
 {
-	int		read_bytes;
-	char	buffer[BUFFER_SIZE + 1];
+	int			read_bytes;
+	char		buffer[BUFFER_SIZE + 1];
 	static char	*reading_buf;
 	char		*ret;
 
-	reading_buf = malloc(sizeof(char) * 1);
-	reading_buf[0] = '\0';
-	if (!reading_buf || !fd || fd < 0)
-		return (NULL);
+	reading_buf = "";
 	read_bytes = 1;
 	while (read_bytes)
 	{
