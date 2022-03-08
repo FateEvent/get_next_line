@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/07 20:13:05 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/08 11:55:46 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,29 @@ size_t	ft_linelen(const char *str)
 	return (counter);
 }
 
+char	*trim_and_stock(char *str)
+{
+	char	*s;
+	int		i;
+	int		len;
+
+	i = 0;
+	len = ft_linelen(str);
+	printf("%d", len);
+	s = malloc(sizeof(char) * (len + 1));
+	while (str[i] != '\n')
+	{
+		s[i] = str[i];
+		printf("%c\n", s[i]);
+		i++;
+	}
+	free(str);
+	s[i++] = '\n';
+	printf("%s\n", s);
+	s[i] = '\0';
+	return (s);
+}
+
 // partir sur une struct ou un tableau pour ne garder qu'une variable statique pour les bonus
 char	*get_next_line(int fd)
 {
@@ -48,14 +71,8 @@ char	*get_next_line(int fd)
 			printf("buffer: %s\n", buffer);
 			if (ft_strchr(reading_buf, '\n') != NULL)
 			{
-				ret = reading_buf;
-				bytes_to_read = ft_linelen(buffer);
-				reading_buf = malloc(sizeof(char) * (bytes_to_read + 1));
-				while (*buffer != '\n')
-					*(reading_buf)++ = (*buffer)++;
-				*(reading_buf)++ = 'x';
-//				*(reading_buf)++ = '\n';
-				*(reading_buf)++ = '\0';
+				ret = trim_and_stock(reading_buf);
+				printf("ret: %s\n", ret);
 				return (ret);
 			}
 			else
@@ -79,16 +96,21 @@ int	main()
 	int		fd;
 	char	*buf;
 	char 	*krum;
+	char	*dash;
 
 	fd = open("text.txt", O_RDONLY);
 	if (fd == -1)
 		return (1);
 	buf = get_next_line(fd);
-//	krum = get_next_line(fd);
+	krum = get_next_line(fd);
+	dash = get_next_line(fd);
 
 	close(fd);
 	printf("return 1: %s", buf);
-//	printf("return 2: %s", krum);
+	printf("return 2: %s", krum);
+	printf("return 3: %s", dash);
 	free(buf);
+	free(krum);
+	free(dash);
 	return (0);
 }
