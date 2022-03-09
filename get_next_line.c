@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/09 12:41:02 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/09 14:24:11 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,13 @@ char	*get_next_line(int fd)
 	static char	*reading_buf;
 	char		*ret;
 
+	if (!fd || fd < 0)
+		return (NULL);
 	if (!reading_buf)
 	{
-		reading_buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-		if (!reading_buf || !fd || fd < 0)
-			return (NULL);
+		reading_buf = "";
+//		if (!reading_buf)
+//			return (NULL);
 	}
 	read_bytes = 1;
 	if (read_bytes == 0 && ft_strchr(buffer, '\n') != NULL)
@@ -75,6 +77,8 @@ char	*get_next_line(int fd)
 		read_bytes = read(fd, &buffer, BUFFER_SIZE);
 		buffer[read_bytes] = '\0';
 		reading_buf = ft_strjoin(reading_buf, buffer);
+		if (!reading_buf)
+			return (NULL);
 		if (ft_strchr(buffer, '\n') != NULL)
 		{
 			printf("read: %s\n", reading_buf);
