@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/08 18:59:00 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/09 12:41:02 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 */
 
 #include "get_next_line.h"
-#define BUFFER_SIZE 5
+
 #include <stdio.h>
+#define BUFFER_SIZE 2
 
 size_t	ft_linelen(const char *str)
 {
@@ -53,10 +54,22 @@ char	*get_next_line(int fd)
 	static char	*reading_buf;
 	char		*ret;
 
-	reading_buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!reading_buf || !fd || fd < 0)
-		return (NULL);
+	if (!reading_buf)
+	{
+		reading_buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		if (!reading_buf || !fd || fd < 0)
+			return (NULL);
+	}
 	read_bytes = 1;
+	if (read_bytes == 0 && ft_strchr(buffer, '\n') != NULL)
+	{
+//		printf("read2: %s\n", reading_buf);
+		ret = trim_and_stock(reading_buf);
+//		printf("ret2: %s\n", reading_buf);
+		reading_buf = ft_strchr(reading_buf, '\n');
+//		printf("read2: %s\n", reading_buf);
+		return (ret);
+	}
 	while (read_bytes)
 	{
 		read_bytes = read(fd, &buffer, BUFFER_SIZE);
@@ -66,12 +79,16 @@ char	*get_next_line(int fd)
 		{
 			printf("read: %s\n", reading_buf);
 			ret = trim_and_stock(reading_buf);
-			reading_buf = &reading_buf[ft_linelen(reading_buf) - 1];
+			printf("ret: %s\n", reading_buf);
+			reading_buf = ft_strchr(reading_buf, '\n');
+			printf("read: %s\n", reading_buf);
 			return (ret);
-		}	
+		}
 	}
 	return (NULL);
 }
+
+void check_leaks();
 
 int	main()
 {
@@ -94,5 +111,6 @@ int	main()
 	free(buf);
 	free(krum);
 	free(dash);
+	check_leaks();
 	return (0);
 }
