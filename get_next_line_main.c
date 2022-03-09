@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_main.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/09 16:44:18 by faventur         ###   ########.fr       */
+/*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
+/*   Updated: 2022/03/09 16:11:36 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,35 +48,25 @@ char	*trim_and_stock(char *str)
 	return (s);
 }
 
-char	*reader(char *reading_buf, char *buffer, int fd, int read_bytes)
+char	*temporary_stocker(char *reading_buf, char *buffer)
 {
+	int		i;
 	char	*tmp;
-	char	*ret;
 
-	while (read_bytes)
-	{
-		read_bytes = read(fd, &buffer, BUFFER_SIZE);
-		buffer[read_bytes] = '\0';
-		tmp = reading_buf;
-		reading_buf = ft_strjoin(tmp, buffer);
-		free(tmp);
-		if (ft_strchr(reading_buf, '\n') != NULL)
-		{
-			printf("ret %s\n", ret);
-			ret = trim_and_stock(reading_buf);
-			reading_buf = ft_strchr(reading_buf, '\n');
-			return (ret);
-		}
-	}
-	return (NULL);
+	i = 0;
+	tmp = reading_buf;
+	reading_buf = ft_strjoin(tmp, buffer);
+//	free(tmp);
+	return (reading_buf);
 }
 
 char	*get_next_line(int fd)
 {
+	int			read_bytes;
 	char		buffer[BUFFER_SIZE + 1];
 	static char	*reading_buf;
 	char		*ret;
-	int			read_bytes;
+	char		*tmp;
 
 	if (!fd || fd < 0)
 		return (NULL);
@@ -88,8 +78,28 @@ char	*get_next_line(int fd)
 			return (NULL);
 	}
 	read_bytes = 1;
-	ret = reader(reading_buf, buffer, fd, read_bytes);
-	return (ret);
+	if (read_bytes == 0 && ft_strchr(buffer, '\n') != NULL)
+	{
+		ret = trim_and_stock(reading_buf);
+		reading_buf = ft_strchr(reading_buf, '\n');
+		return (ret);
+	}
+	while (read_bytes)
+	{
+		read_bytes = read(fd, &buffer, BUFFER_SIZE);
+		buffer[read_bytes] = '\0';
+		tmp = reading_buf;
+		reading_buf = ft_strjoin(tmp, buffer);
+//		temporary_stocker(reading_buf, buffer);
+//		free(tmp);
+		if (ft_strchr(buffer, '\n') != NULL)
+		{
+			ret = trim_and_stock(reading_buf);
+			reading_buf = ft_strchr(reading_buf, '\n');
+			return (ret);
+		}
+	}
+	return (NULL);
 }
 
 void check_leaks();
@@ -105,16 +115,16 @@ int	main()
 	if (fd == -1)
 		return (1);
 	buf = get_next_line(fd);
-//	krum = get_next_line(fd);
-//	dash = get_next_line(fd);
+	krum = get_next_line(fd);
+	dash = get_next_line(fd);
 
 	close(fd);
 	printf("return 1: %s", buf);
-//	printf("return 2: %s", krum);
-//	printf("return 3: %s", dash);
+	printf("return 2: %s", krum);
+	printf("return 3: %s", dash);
 	free(buf);
-//	free(krum);
-//	free(dash);
+	free(krum);
+	free(dash);
 	check_leaks();
 	return (0);
 }
