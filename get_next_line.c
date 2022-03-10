@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/10 16:54:33 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/10 19:34:57 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,61 +19,104 @@
 #include <stdio.h>
 //#define BUFFER_SIZE 2
 
-size_t	ft_linelen(const char *str)
+char	*ft_rest(char *reading_buf)
 {
-	size_t	counter;
+	int		i;
+	int		j;
+	int		len;
+	char	*s;
 
-	counter = 0;
-	while (str[counter] != '\n')
-		counter++;
-	counter++;
-	return (counter);
+	i = 0;
+	j = 0;
+	len = ft_strlen(reading_buf);
+	if (len == 0)
+	{
+		free(reading_buf);
+		return (NULL);
+	}
+	while (reading_buf[j] != '\n')
+		j++;
+	if (reading_buf[j] == '\0')
+	{
+		free (reading_buf);
+		return (NULL);
+	}
+	s = (char *)malloc(sizeof(char) * (len - j));
+	if (!s)
+		return (NULL);
+	j++;
+	while (reading_buf[j])
+		s[i++] = reading_buf[j++];
+	s[i] = '\0';
+	free (reading_buf);
+	return (s);
 }
 
-char	*trim_and_stock(char *str)
+char	*ft_last_line(char *reading_buf)
 {
 	char	*s;
 	int		i;
 
 	i = 0;
-	s = malloc(sizeof(char) * (ft_linelen(str) + 1));
-	while (str[i] != '\n')
-	{
-		s[i] = str[i];
+	while (reading_buf[i] && reading_buf[i] != '\n')
 		i++;
-	}
+	s = (char *)malloc(sizeof(char) * (i + 2));
+	if (!s)
+		return (NULL);
+	i = 0;
+	while (reading_buf[i++] != '\0')
+		s[i] = reading_buf[i];
 	s[i++] = '\n';
 	s[i] = '\0';
-	free(str);
 	return (s);
+}
+
+char	*ft_reader(int fd, char *buffer, char *reading_buf, char *tmp)
+{
+	int		bytes_read;
+
+	bytes_read = 1;
+	while (bytes_read)
+	{
+		bytes_read = read(fd, &buffer, 1);
+		if (bytes_read < 0)
+		{
+			free(buffer);
+			return (NULL);
+		}
+		buffer[bytes_read] = '\0';
+		tmp = reading_buf;
+		if (!tmp)
+		{
+			tmp = (char *)malloc(sizeof(char) * 1);
+			tmp[0] = '\0';
+		}
+		reading_buf = ft_strjoin(tmp, buffer);
+		free(tmp);
+		if (strchr(reading_buf, '\n'))
+			break ;
+	}
+	free(buffer);
+	return (reading_buf);
 }
 
 char	*get_next_line(int fd)
 {
-	int			read_bytes;
-	char		buffer[2];
+	char		*buffer;
 	static char	*reading_buf;
 	char		*ret;
+	char		*tmp;
 
+	tmp = NULL;
 	if (fd < 0 || fd > 4999 || BUFFER_SIZE < 1)
 		return (NULL);
+	buffer = (char *)malloc(BUFFER_SIZE + 1);
+	reading_buf = ft_reader(fd, buffer, reading_buf, tmp);
 	if (!reading_buf)
-		reading_buf = "";
-	read_bytes = 1;
-	while (read_bytes)
-	{
-		read_bytes = read(fd, &buffer, 1);
-		buffer[read_bytes] = '\0';
-		reading_buf = ft_strjoin(reading_buf, buffer);
-		if (ft_strchr(buffer, '\n') != NULL)
-		{
-			ret = trim_and_stock(reading_buf);
-			reading_buf = ft_strchr(reading_buf, '\n');
-			return (ret);
-		}
-		free(reading_buf);
-	}
-	return (NULL);
+		return (NULL);
+	ret = ft_last_line(reading_buf);
+	reading_buf = ft_rest(reading_buf);
+	return (ret);
 }
 /*
 void check_leaks();
