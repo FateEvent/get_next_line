@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 14:42:42 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/10 11:34:11 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/10 16:22:56 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdlib.h>
-# include <fcntl.h>
-# include <sys/types.h>
-# include <sys/stat.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 char	*get_next_line(int fd);
 char	*ft_strchr(const char *str, int c);

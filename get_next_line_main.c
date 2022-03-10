@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/10 15:18:41 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/10 16:24:52 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 
 #include "get_next_line.h"
 
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <stdio.h>
 #define BUFFER_SIZE 2
 
@@ -55,7 +58,7 @@ char	*get_next_line(int fd)
 	static char	*reading_buf;
 	char		*ret;
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || fd > 9999 || BUFFER_SIZE < 1)
 		return (NULL);
 	if (!reading_buf)
 		reading_buf = "";
