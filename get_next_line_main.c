@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/10 16:24:52 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/10 16:32:47 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ int	main()
 	char	*buf;
 	char	*krum;
 	char	*dash;
+	char	*krik;
+	char	*trip;
 
 	fd = open("txt.txt", O_RDONLY);
 	if (fd == -1)
@@ -100,11 +102,15 @@ int	main()
 	buf = get_next_line(fd);
 	krum = get_next_line(fd);
 	dash = get_next_line(fd);
+	krik = get_next_line(fd);
+	trip = get_next_line(fd);
 
 	close(fd);
 	printf("return 1: %s", buf);
 	printf("return 2: %s", krum);
 	printf("return 3: %s", dash);
+	printf("return 4: %s", krik);
+	printf("return 5: %s", trip);
 	free(buf);
 	free(krum);
 	free(dash);
