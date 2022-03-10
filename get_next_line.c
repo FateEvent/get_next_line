@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/10 14:31:46 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/10 15:32:09 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "get_next_line.h"
 
 #include <stdio.h>
-#define BUFFER_SIZE 2
+//#define BUFFER_SIZE 2
 
 size_t	ft_linelen(const char *str)
 {
@@ -54,25 +54,17 @@ char	*get_next_line(int fd)
 	char		buffer[BUFFER_SIZE + 1];
 	static char	*reading_buf;
 	char		*ret;
-	char		*tmp;
 
-	if (!fd || fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	if (!reading_buf)
 		reading_buf = "";
 	read_bytes = 1;
-	if (read_bytes == 0 && ft_strchr(buffer, '\n') != NULL)
-	{
-		ret = trim_and_stock(reading_buf);
-		reading_buf = ft_strchr(reading_buf, '\n');
-		return (ret);
-	}
 	while (read_bytes)
 	{
 		read_bytes = read(fd, &buffer, BUFFER_SIZE);
 		buffer[read_bytes] = '\0';
-		tmp = reading_buf;
-		reading_buf = ft_strjoin(tmp, buffer);
+		reading_buf = ft_strjoin(reading_buf, buffer);
 		if (ft_strchr(buffer, '\n') != NULL)
 		{
 			ret = trim_and_stock(reading_buf);
@@ -81,9 +73,15 @@ char	*get_next_line(int fd)
 		}
 		free(reading_buf);
 	}
+	if (read_bytes == 0 && ft_strchr(buffer, '\n') != NULL)
+	{
+		ret = trim_and_stock(reading_buf);
+		reading_buf = ft_strchr(reading_buf, '\n');
+		return (ret);
+	}
 	return (NULL);
 }
-
+/*
 void check_leaks();
 
 int	main()
@@ -110,3 +108,4 @@ int	main()
 	check_leaks();
 	return (0);
 }
+*/

@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/01 15:48:12 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/09 16:11:36 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/10 15:18:41 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,56 +48,36 @@ char	*trim_and_stock(char *str)
 	return (s);
 }
 
-char	*temporary_stocker(char *reading_buf, char *buffer)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	tmp = reading_buf;
-	reading_buf = ft_strjoin(tmp, buffer);
-//	free(tmp);
-	return (reading_buf);
-}
-
 char	*get_next_line(int fd)
 {
 	int			read_bytes;
 	char		buffer[BUFFER_SIZE + 1];
 	static char	*reading_buf;
 	char		*ret;
-	char		*tmp;
 
-	if (!fd || fd < 0)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	if (!reading_buf)
-	{
-		reading_buf = malloc(sizeof(char) * 1);
-		reading_buf[0] = '\0';
-		if (!reading_buf)
-			return (NULL);
-	}
+		reading_buf = "";
 	read_bytes = 1;
-	if (read_bytes == 0 && ft_strchr(buffer, '\n') != NULL)
-	{
-		ret = trim_and_stock(reading_buf);
-		reading_buf = ft_strchr(reading_buf, '\n');
-		return (ret);
-	}
 	while (read_bytes)
 	{
 		read_bytes = read(fd, &buffer, BUFFER_SIZE);
 		buffer[read_bytes] = '\0';
-		tmp = reading_buf;
-		reading_buf = ft_strjoin(tmp, buffer);
-//		temporary_stocker(reading_buf, buffer);
-//		free(tmp);
+		reading_buf = ft_strjoin(reading_buf, buffer);
 		if (ft_strchr(buffer, '\n') != NULL)
 		{
 			ret = trim_and_stock(reading_buf);
 			reading_buf = ft_strchr(reading_buf, '\n');
 			return (ret);
 		}
+		free(reading_buf);
+	}
+	if (read_bytes == 0 && ft_strchr(buffer, '\n') != NULL)
+	{
+		ret = trim_and_stock(reading_buf);
+		reading_buf = ft_strchr(reading_buf, '\n');
+		return (ret);
 	}
 	return (NULL);
 }
