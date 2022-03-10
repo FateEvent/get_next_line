@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/10 16:36:07 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/10 16:54:33 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,18 @@ char	*trim_and_stock(char *str)
 char	*get_next_line(int fd)
 {
 	int			read_bytes;
-	char		buffer[BUFFER_SIZE + 1];
+	char		buffer[2];
 	static char	*reading_buf;
 	char		*ret;
 
-	if (fd < 0 || fd > 9999 || BUFFER_SIZE < 1)
+	if (fd < 0 || fd > 4999 || BUFFER_SIZE < 1)
 		return (NULL);
 	if (!reading_buf)
 		reading_buf = "";
 	read_bytes = 1;
 	while (read_bytes)
 	{
-		read_bytes = read(fd, &buffer, BUFFER_SIZE);
+		read_bytes = read(fd, &buffer, 1);
 		buffer[read_bytes] = '\0';
 		reading_buf = ft_strjoin(reading_buf, buffer);
 		if (ft_strchr(buffer, '\n') != NULL)
@@ -72,12 +72,6 @@ char	*get_next_line(int fd)
 			return (ret);
 		}
 		free(reading_buf);
-	}
-	if (read_bytes == 0 && ft_strchr(buffer, '\n') != NULL)
-	{
-		ret = trim_and_stock(reading_buf);
-		reading_buf = ft_strchr(reading_buf, '\n');
-		return (ret);
 	}
 	return (NULL);
 }
