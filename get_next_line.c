@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/10 19:34:57 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/10 19:43:22 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,23 @@ char	*ft_rest(char *reading_buf)
 {
 	int		i;
 	int		j;
-	int		len;
 	char	*s;
 
-	i = 0;
+	i = ft_strlen(reading_buf);
 	j = 0;
-	len = ft_strlen(reading_buf);
-	if (len == 0)
-	{
-		free(reading_buf);
+	if (!reading_buf)
 		return (NULL);
-	}
-	while (reading_buf[j] != '\n')
+	while (reading_buf[j] && reading_buf[j] != '\n')
 		j++;
 	if (reading_buf[j] == '\0')
 	{
 		free (reading_buf);
 		return (NULL);
 	}
-	s = (char *)malloc(sizeof(char) * (len - j));
+	s = (char *)malloc(sizeof(char) * (i - j));
 	if (!s)
 		return (NULL);
+	i = 0;
 	j++;
 	while (reading_buf[j])
 		s[i++] = reading_buf[j++];
@@ -58,15 +54,20 @@ char	*ft_last_line(char *reading_buf)
 	int		i;
 
 	i = 0;
+	if (!reading_buf)
+		return (NULL);
 	while (reading_buf[i] && reading_buf[i] != '\n')
 		i++;
+	if (reading_buf[0] == 0)
+		return (NULL);
 	s = (char *)malloc(sizeof(char) * (i + 2));
 	if (!s)
 		return (NULL);
 	i = 0;
 	while (reading_buf[i++] != '\0')
 		s[i] = reading_buf[i];
-	s[i++] = '\n';
+	if (reading_buf[i] == '\n')
+		s[i++] = '\n';
 	s[i] = '\0';
 	return (s);
 }
@@ -108,7 +109,7 @@ char	*get_next_line(int fd)
 	char		*tmp;
 
 	tmp = NULL;
-	if (fd < 0 || fd > 4999 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	reading_buf = ft_reader(fd, buffer, reading_buf, tmp);
