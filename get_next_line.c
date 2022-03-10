@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/10 11:41:14 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/10 14:31:46 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,33 +18,6 @@
 
 #include <stdio.h>
 #define BUFFER_SIZE 2
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*substr;
-	size_t	i;
-	size_t	s_len;
-
-	i = 0;
-	s_len = ft_strlen(s);
-	if (!s)
-		return (NULL);
-	if (start > s_len)
-	{
-		substr = (char *)malloc(sizeof(char) * 1);
-		if (substr == NULL)
-			return (NULL);
-		substr[0] = '\0';
-		return (substr);
-	}
-	substr = (char *)malloc(sizeof(char) * (s_len - start + 1));
-	if (substr == NULL)
-		return (NULL);
-	while (i < len && s[start] != '\0')
-		substr[i++] = s[start++];
-	substr[i] = '\0';
-	return (substr);
-}
 
 size_t	ft_linelen(const char *str)
 {
@@ -75,18 +48,6 @@ char	*trim_and_stock(char *str)
 	return (s);
 }
 
-char	*temporary_stocker(char *reading_buf, char *buffer)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	tmp = reading_buf;
-	reading_buf = ft_strjoin(tmp, buffer);
-//	free(tmp);
-	return (reading_buf);
-}
-
 char	*get_next_line(int fd)
 {
 	int			read_bytes;
@@ -95,15 +56,10 @@ char	*get_next_line(int fd)
 	char		*ret;
 	char		*tmp;
 
-	if (!fd || fd < 0)
+	if (!fd || fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	if (!reading_buf)
-	{
-		reading_buf = malloc(sizeof(char) * 1);
-		reading_buf[0] = '\0';
-		if (!reading_buf)
-			return (NULL);
-	}
+		reading_buf = "";
 	read_bytes = 1;
 	if (read_bytes == 0 && ft_strchr(buffer, '\n') != NULL)
 	{
@@ -117,14 +73,13 @@ char	*get_next_line(int fd)
 		buffer[read_bytes] = '\0';
 		tmp = reading_buf;
 		reading_buf = ft_strjoin(tmp, buffer);
-//		temporary_stocker(reading_buf, buffer);
-//		free(tmp);
 		if (ft_strchr(buffer, '\n') != NULL)
 		{
 			ret = trim_and_stock(reading_buf);
 			reading_buf = ft_strchr(reading_buf, '\n');
 			return (ret);
 		}
+		free(reading_buf);
 	}
 	return (NULL);
 }
