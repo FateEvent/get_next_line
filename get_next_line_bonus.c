@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_main.c                               :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/11 11:28:23 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/11 11:35:27 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,10 @@
 ** The get_next_line() function returns a line read from a file descriptor.
 */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <stdio.h>
-#define BUFFER_SIZE 10000
+//#define BUFFER_SIZE 2
 
 char	*ft_rest(char *reading_buf)
 {
@@ -127,7 +124,7 @@ char	*get_next_line(int fd)
 	reading_buf = ft_rest(reading_buf);
 	return (ret);
 }
-
+/*
 void check_leaks();
 
 int	main()
@@ -154,3 +151,4 @@ int	main()
 	check_leaks();
 	return (0);
 }
+*/
