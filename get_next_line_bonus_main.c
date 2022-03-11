@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_main.c                               :+:      :+:    :+:   */
+/*   get_next_line_bonus_main.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/11 13:10:59 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/11 11:54:03 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 ** The get_next_line() function returns a line read from a file descriptor.
 */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
-#define BUFFER_SIZE 10000
+#define BUFFER_SIZE 2
 
 char	*ft_rest(char *reading_buf)
 {
@@ -136,21 +136,40 @@ int	main()
 	char	*buf;
 	char	*krum;
 	char	*dash;
+	char	*bruf;
+	char	*kam;
+	char	*krash; 
 
 	fd = open("txt.txt", O_RDONLY);
 	if (fd == -1)
 		return (1);
 	buf = get_next_line(fd);
 	krum = get_next_line(fd);
-	dash = get_next_line(fd);
-
 	close(fd);
+	fd = open("txt.txt", O_RDONLY);
+	if (fd == -1)
+		return (1);
+	dash = get_next_line(fd);
+	bruf = get_next_line(fd);
+	close(fd);
+	fd = open("text.txt", O_RDONLY);
+	if (fd == -1)
+		return (1);
+	kam = get_next_line(fd);
+	krash = get_next_line(fd);
 	printf("return 1: %s", buf);
 	printf("return 2: %s", krum);
 	printf("return 3: %s", dash);
+	printf("return 4: %s", bruf);
+	printf("return 5: %s", kam);
+	printf("return 6: %s", krash);
+	close(fd);
 	free(buf);
 	free(krum);
 	free(dash);
+	free(bruf);
+	free(kam);
+	free(krash);
 	check_leaks();
 	return (0);
 }
