@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/11 13:37:58 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/11 18:48:02 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*ft_reader(int fd, char *buffer, char *reading_buf, char *tmp)
 	bytes_read = 1;
 	while (bytes_read)
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		bytes_read = read(fd, buffer, 1);
 		if (bytes_read == -1)
 		{
 			free(buffer);
@@ -107,21 +107,21 @@ char	*ft_reader(int fd, char *buffer, char *reading_buf, char *tmp)
 char	*get_next_line(int fd)
 {
 	char		*buffer;
-	static char	*reading_buf;
+	static char	*reading_buf[257];
 	char		*ret;
 	char		*tmp;
 
 	tmp = NULL;
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1 || fd > 256)
 		return (NULL);
-	buffer = (char *)malloc(BUFFER_SIZE + 1);
+	buffer = (char *)malloc(sizeof(char) * 2);
 	if (!buffer)
 		return (NULL);
-	reading_buf = ft_reader(fd, buffer, reading_buf, tmp);
-	if (!reading_buf)
+	reading_buf[fd] = ft_reader(fd, buffer, reading_buf[fd], tmp);
+	if (!reading_buf[fd])
 		return (NULL);
-	ret = ft_last_line(reading_buf);
-	reading_buf = ft_rest(reading_buf);
+	ret = ft_last_line(reading_buf[fd]);
+	reading_buf[fd] = ft_rest(reading_buf[fd]);
 	return (ret);
 }
 /*
