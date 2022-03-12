@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/12 15:29:10 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/12 16:32:35 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char	*get_next_line(int fd)
 	tmp = NULL;
 	if (fd < 0 || BUFFER_SIZE < 1 || fd > 256)
 		return (NULL);
-	buffer = (char *)malloc(sizeof(char) * 2);
+	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
 	reading_buf[fd] = ft_reader(fd, buffer, reading_buf[fd], tmp);
