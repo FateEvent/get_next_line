@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/11 18:48:02 by faventur         ###   ########.fr       */
+/*   Updated: 2022/03/12 15:29:10 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@
 
 #include "get_next_line_bonus.h"
 
-#include <stdio.h>
-//#define BUFFER_SIZE 2
-
-char	*ft_rest(char *reading_buf)
+static char	*ft_rest(char *reading_buf)
 {
 	int		i;
 	int		j;
@@ -48,7 +45,7 @@ char	*ft_rest(char *reading_buf)
 	return (s);
 }
 
-char	*ft_last_line(char *reading_buf)
+static char	*ft_last_line(char *reading_buf)
 {
 	char	*s;
 	int		i;
@@ -75,7 +72,7 @@ char	*ft_last_line(char *reading_buf)
 	return (s);
 }
 
-char	*ft_reader(int fd, char *buffer, char *reading_buf, char *tmp)
+static char	*ft_reader(int fd, char *buffer, char *reading_buf, char *tmp)
 {
 	int		bytes_read;
 
@@ -124,31 +121,3 @@ char	*get_next_line(int fd)
 	reading_buf[fd] = ft_rest(reading_buf[fd]);
 	return (ret);
 }
-/*
-void check_leaks();
-
-int	main()
-{
-	int		fd;
-	char	*buf;
-	char	*krum;
-	char	*dash;
-
-	fd = open("txt.txt", O_RDONLY);
-	if (fd == -1)
-		return (1);
-	buf = get_next_line(fd);
-	krum = get_next_line(fd);
-	dash = get_next_line(fd);
-
-	close(fd);
-	printf("return 1: %s", buf);
-	printf("return 2: %s", krum);
-	printf("return 3: %s", dash);
-	free(buf);
-	free(krum);
-	free(dash);
-	check_leaks();
-	return (0);
-}
-*/
