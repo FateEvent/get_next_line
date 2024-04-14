@@ -6,7 +6,7 @@
 /*   By: faventur <faventur@student.42mulhouse.fr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 15:36:09 by faventur          #+#    #+#             */
-/*   Updated: 2022/03/12 16:32:35 by faventur         ###   ########.fr       */
+/*   Updated: 2024/04/15 00:10:27 by faventur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,24 @@ static char	*ft_last_line(char *reading_buf)
 	return (s);
 }
 
+static char	*create_tmp_or_return(char **buffer, char *reading_buf, char **tmp)
+{
+	if (buffer)
+	{
+		free(*buffer);
+		return (NULL);
+	}
+	*tmp = reading_buf;
+	if (!(*tmp))
+	{
+		*tmp = (char *)malloc(sizeof(char) * 1);
+		if (!(*tmp))
+			return (NULL);
+		*tmp[0] = '\0';
+	}
+	return (NULL);
+}
+
 static char	*ft_reader(int fd, char *buffer, char *reading_buf, char *tmp)
 {
 	int		bytes_read;
@@ -79,21 +97,17 @@ static char	*ft_reader(int fd, char *buffer, char *reading_buf, char *tmp)
 	bytes_read = 1;
 	while (bytes_read)
 	{
-		bytes_read = read(fd, buffer, 1);
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-		{
-			free(buffer);
-			return (NULL);
-		}
+			return (create_tmp_or_return(&buffer, NULL, NULL));
 		buffer[bytes_read] = '\0';
-		tmp = reading_buf;
+		create_tmp_or_return(NULL, reading_buf, &tmp);
 		if (!tmp)
-		{
-			tmp = (char *)malloc(sizeof(char) * 1);
-			tmp[0] = '\0';
-		}
+			return (create_tmp_or_return(&buffer, NULL, NULL));
 		reading_buf = ft_strjoin(tmp, buffer);
 		free(tmp);
+		if (!reading_buf)
+			return (create_tmp_or_return(&buffer, NULL, NULL));
 		if (ft_strchr(reading_buf, '\n') != NULL)
 			break ;
 	}
