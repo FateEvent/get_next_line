@@ -75,17 +75,16 @@ static char	*ft_last_line(char *reading_buf)
 static char	*create_tmp_or_return(char **buffer, char *reading_buf, char **tmp)
 {
 	if (buffer)
-	{
 		free(*buffer);
-		return (NULL);
-	}
-	*tmp = reading_buf;
-	if (!(*tmp))
+	else
 	{
-		*tmp = (char *)malloc(sizeof(char) * 1);
+		*tmp = reading_buf;
 		if (!(*tmp))
-			return (NULL);
-		*tmp[0] = '\0';
+		{
+			*tmp = (char *)malloc(sizeof(char) * 1);
+			if (*tmp)
+				*tmp[0] = '\0';
+		}
 	}
 	return (NULL);
 }
